@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        // "lib": [ "ES5", "ES6", "ES7", "ES2015", "ES2016", "ES2017", "ES2018", "ESNext" ],
+        "noImplicitAny": true,
+        "allowJs": true,
+        // "moduleResolution":"classic",
+        "jsx": "react",
+        "removeComments": false,
+        "target": "ES2020",
+        // "module": "commonjs",
+        "declaration": false,
+        "declarationMap": false,
+        "inlineSourceMap": false,
+        "inlineSources": false,
+        "strict": true,
+        "module": "ES2020",
+        "esModuleInterop": true,
+        "types": ["node"],
+        // "outDir": "sandbox",
+        // "rootDir": "./",
+    },
+
+    "exclude": [
+        "./sandbox",
+        "./sandbox/**/*",
+        "./dev/**/*",
+        "./webpack.config.js"
+    ]
+    
+}
