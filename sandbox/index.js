@@ -4,6 +4,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _SensenElement_instances, _SensenElement_connectedProtocol;
+import { SensenAppearance } from "./appearance";
 import { CommonDirectives } from "./directive";
 import { SensenEmitter } from "./emitter";
 import { FindGlobalExpressions, FindStateData } from "./expression";
@@ -33,6 +34,9 @@ export function RawComponent($, config) {
             this.$stateMirrors = this.$stateMirrors || {};
             this.$stateHydrates = new SensenState(this.$state);
             this.$state = this.$stateHydrates.state;
+            this.$appearance = new SensenAppearance(this.$controller.appearance);
+            this.$appearance.mount().bind(this);
+            console.warn('Appearance', this.$appearance.$UiD);
             this.$hydrators();
             this.$construct();
         }
@@ -151,7 +155,9 @@ export class SensenElement extends HTMLElement {
         this.$inTransition = false;
         // new( $props : Props ) : this
         this.$observations = {};
+        // $appearance ?: SensenAppearance
         this.$methods = {};
+        // this.$appearance = new SensenAppearance();
         this.$emitter = new SensenEmitter();
         this.$tnamespace = `${this.$tnamespace || 'sense'}-`;
         this.$anamespace = `${this.$anamespace || 'state'}:`;

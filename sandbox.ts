@@ -177,6 +177,14 @@ const WorldComponent = Component<HelloState>({
         world : 'World Title'
 
     },
+
+    appearance:{
+
+        $self:{
+            backgroundColor:'red'
+        }
+        
+    },
     
     transition:{
 

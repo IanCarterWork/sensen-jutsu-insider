@@ -6,15 +6,47 @@
 
 declare interface Window {
 
-    $SensenComponents : ISensenComponents
+    $SensenComponents : SensenComponents
 
-    $SensenRouter : ISensenRouter
+    $SensenRouter : SensenRouter
 
     $GlobalDirectives: IGlobalDirectives;
 
 }
 
 
+
+
+/**
+ * Utilities
+ */
+declare type TObjectEmbed<T> = { 
+    [K in keyof T]?: T[K] | number
+}
+
+
+
+
+/**
+ * Metric
+ */
+
+declare type MetricTAlphaNum = 'a b c d e f g h i j k l m n o p q r s t u v w x y z A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 0 1 2 3 4 5 6 7 8 9';
+
+declare type MetricTAlphaNumL = 'a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9';
+ 
+declare type MetricTAlphaNumU = 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 0 1 2 3 4 5 6 7 8 9';
+ 
+declare type MetricTAlphaU = 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z';
+ 
+declare type MetricTAlphaL = 'a b c d e f g h i j k l m n o p q r s t u v w x y z';
+ 
+declare type MetricTNum = '0 1 2 3 4 5 6 7 8 9';
+ 
+declare type MetricTHex = 'a b c d e f A B C D E F';
+ 
+
+ 
 
 
 
@@ -53,7 +85,7 @@ declare interface KuchiyoceParameter{
 
     state? : SensenElementState;
 
-    main: (state: SensenElementState, canvas : ISensenElement<SensenElementState>) => any;
+    main: (state: SensenElementState, canvas : SensenElement<SensenElementState>) => any;
     
 }
 
@@ -124,13 +156,13 @@ declare interface SensenRouterSwitchRequest {
 }
 
 
-declare interface ISensenRouter{
+declare interface SensenRouter{
 
     options: SensenRouterOptions;
 
     routes: SensenRouterRoutes;
 
-    current?: ISensenElement<SensenElementState>;
+    current?: SensenElement<SensenElementState>;
 
     canvas?: HTMLElement;
 
@@ -240,7 +272,7 @@ declare interface ISensenRouter{
  * Sensen Elements
  */
 
-declare interface ISensenComponents{
+declare interface SensenComponents{
 
     [x : string] : CustomElementConstructor
     
@@ -263,7 +295,7 @@ declare interface SensenElementMethods<
 declare type SensenElementMountMethods = '$willMount' | '$willUnMount' | '$willAdopted'
 
 
-declare interface ISensenElement<State extends SensenElementState> extends HTMLElement{
+declare interface SensenElement<State extends SensenElementState> extends HTMLElement{
 
     $isReady?:boolean;
 
@@ -304,6 +336,8 @@ declare interface ISensenElement<State extends SensenElementState> extends HTMLE
 
     $inTransition?:boolean
 
+
+    $appearance ?: object
     
     
     $initialize?(state ?: State) : this;
@@ -356,7 +390,7 @@ declare interface ISensenElement<State extends SensenElementState> extends HTMLE
 }
 
 
-declare type ISensenElementPropEntry = {
+declare type SensenElementPropEntry = {
 
     old: string;
 
@@ -374,11 +408,6 @@ declare type ISensenElementPropEntry = {
  * Component
  */
 
-declare interface IComponent<Props> {
-
-}
-
-
 declare interface RawComponentConfig{
 
     namespace?:{
@@ -391,30 +420,13 @@ declare interface RawComponentConfig{
     
 }
 
-
-// declare type ComponentMethodEvent{
-
-//     component : object;
-
-//     event : Event
-    
-// }
-
-declare interface ComponentRenderDependencies<
-    
-    State extends SensenElementState, 
-    
-    // Props extends SensenElementProps
-
->{
-
-    // props : Props;
+declare interface ComponentRenderDependencies< State extends SensenElementState >{
 
     state : State;
     
-    element: ISensenElement<State>;
+    element: SensenElement<State>;
 
-    router?: ISensenRouter;
+    router?: SensenRouter;
 
     children: HTMLCollection;
 
@@ -442,6 +454,8 @@ declare type ComponentAttributes<
         ondestroy?: SensenAnimationTransition,
         
     }
+
+    appearance?: TAppearanceProps
 
     construct?: (dependencies: ComponentRenderDependencies<State>) => void | Promise<any>;
 
@@ -723,9 +737,7 @@ declare interface ISensenAnimationEngine{
 
     timer?:  NodeJS.Timeout;
 
-
     Start() : this;
-
 
 }
 
@@ -758,5 +770,108 @@ declare interface SensenAnimationTransition{
     exit: (W?: HTMLElement) => Promise<HTMLElement | undefined>;
 
     exitReverse: (W?: HTMLElement) => Promise<HTMLElement | undefined>;
+    
+}
+
+
+
+
+
+
+/**
+ * Sensen Appearance
+ */
+
+
+
+
+ declare interface TAppearanceDeclarations extends Omit<CSSStyleDeclaration, 'width' | 'height' | 'margin' | 'padding' | 'length' | 'parentRule'>{
+    
+    width?: 'auto' | 'initial' | 'inherit' | 'unset' | number | string;
+    height?: 'auto' | 'initial' | 'inherit' | 'unset' | number | string;
+    
+    
+    paddingVertical?: 'auto' | 'initial' | 'inherit' | 'unset' | number | string;
+    paddingHorizontal?: 'auto' | 'initial' | 'inherit' | 'unset' | number | string;
+    
+    marginVertical?: 'auto' | 'initial' | 'inherit' | 'unset' | number | string;
+    marginHorizontal?: 'auto' | 'initial' | 'inherit' | 'unset' | number | string;
+    
+    padding?: 'auto' | 'initial' | 'inherit' | 'unset' | (string | number)[] | number | string;
+    margin?: 'auto' | 'initial' | 'inherit' | 'unset' | (string | number)[] | number | string;
+
+    backdropFilter?: 'auto' | 'initial' | 'inherit' | 'unset' | string;
+
+    scrollbarWidth?: 'auto' | 'initial' | 'inherit' | 'unset' | string;
+
+}
+
+
+
+
+declare type TAppearanceEntry = {
+    selector: string, 
+    value: TObjectEmbed<TAppearanceDeclarations>,
+    // rank: number
+}
+
+
+
+
+declare type TAppearanceProps = {
+
+    [selector: string] : TObjectEmbed<TAppearanceDeclarations>
+    
+}
+
+
+
+declare type TAppearanceEmitter = {
+
+    construct: (component: SensenAppearance) => void;
+
+    initialized: (component: SensenAppearance) => void;
+
+    mounted: (component: SensenAppearance) => void;
+
+    selectorAdded: (entry: TAppearanceEntry) => void;
+    
+}
+
+
+
+declare interface SensenAppearance{
+
+    $dom: HTMLStyleElement;
+
+    $UiD: string;
+
+    $emitter: ISensenEmitter;
+    
+    props: TAppearanceProps;
+    
+    emit: TAppearanceEmitter;
+
+
+    $refs : { [K:string] : Text }
+    
+
+    absorbent(txt: string, domain?: string) : TAppearanceProps;
+
+    $generateUiD() : string;
+
+    $initialize() : this;
+
+    selector(selector: string, value: TObjectEmbed<TAppearanceDeclarations>) : this;
+
+    selectors(appearance: TAppearanceProps) : this;
+
+    $emitting() : this;
+
+    mount() : this;
+
+    bind(element : HTMLElement) : this;
+
+    render(slot: string) : Text;
     
 }

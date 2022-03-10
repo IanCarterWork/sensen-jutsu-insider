@@ -6,7 +6,7 @@ import { isClass } from "./utilities";
 
 
 
-export class SensenRouter implements ISensenRouter{
+export class SensenRouter implements SensenRouter{
 
 
     routes: SensenRouterRoutes = {} as SensenRouterRoutes;

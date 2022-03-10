@@ -1,4 +1,5 @@
 import { FxPresenter, FxSlideHorizontal } from "./animation/preset";
+import { SensenAppearance } from "./appearance";
 import { CommonDirectives } from "./directive";
 import { SensenEmitter } from "./emitter";
 import { FindGlobalExpressions, FindStateData, isCompilable, isCompilableContent } from "./expression";
@@ -32,7 +33,7 @@ export function RawComponent<State extends SensenElementState>(
     $initial.state = {...$initial.state} as State
 
 
-    return class extends SensenElement<State> {
+    return class extends SensenElement<State> implements SensenElement<State> {
 
         $observations = {} as MutationObserver
 
@@ -46,6 +47,7 @@ export function RawComponent<State extends SensenElementState>(
     
         $methods? : SensenElementMethods<State>
 
+        $appearance ?: SensenAppearance
         
 
         constructor( $state : State = {} as State ){
@@ -73,13 +75,19 @@ export function RawComponent<State extends SensenElementState>(
             
             this.$state = this.$stateHydrates.state as State
 
+            
+            
+            this.$appearance = new SensenAppearance(this.$controller.appearance);
 
+            this.$appearance.mount().bind(this)
+
+            console.warn('Appearance', this.$appearance.$UiD )
             
 
             this.$hydrators();
 
             this.$construct()
-            
+
         }
 
 
@@ -168,7 +176,7 @@ export function RawComponent<State extends SensenElementState>(
         
             return this.$controller?.mount ? this.$controller?.mount({
                 
-                element: this,
+                element: this as SensenElement<State>,
     
                 router: window.$SensenRouter,
     
@@ -315,7 +323,7 @@ export class SensenElement<
     
     State extends SensenElementState
     
-> extends HTMLElement implements ISensenElement< State & SensenElementState >{
+> extends HTMLElement implements SensenElement< State & SensenElementState >{
 
 
     $showing?:boolean = false
@@ -352,6 +360,9 @@ export class SensenElement<
     mountResponseRejected?: any
 
     $router ?: InstanceType<typeof SensenRouter>
+
+
+    // $appearance ?: SensenAppearance
     
 
 
@@ -370,6 +381,7 @@ export class SensenElement<
         
         super();
 
+        // this.$appearance = new SensenAppearance();
 
         this.$emitter = new SensenEmitter();
 
@@ -965,7 +977,7 @@ export class SensenElement<
 
                                         name: record.attributeName,
                                         
-                                    } as ISensenElementPropEntry);
+                                    } as SensenElementPropEntry);
     
                                 }
 

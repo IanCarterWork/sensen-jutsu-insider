@@ -82,6 +82,11 @@ const WorldComponent = Component({
         counter: 0,
         world: 'World Title'
     },
+    appearance: {
+        $self: {
+            backgroundColor: 'red'
+        }
+    },
     transition: {
         onbuild: FxScalingIn,
         ondestroy: FxScalingIn,
